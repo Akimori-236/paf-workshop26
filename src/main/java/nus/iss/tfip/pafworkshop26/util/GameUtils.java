@@ -9,31 +9,38 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import nus.iss.tfip.pafworkshop26.Constants;
 import nus.iss.tfip.pafworkshop26.model.Game;
 
-public class GameUtils {
+public class GameUtils implements Constants{
 
     public static Game toGame(Document doc) {
         Game g = new Game();
-        g.setGame_id(doc.getInteger("gid"));
-        g.setName(doc.getString("name"));
-        if (doc.getInteger("year") != null) {
-            g.setYear(doc.getInteger("year"));;
+        g.setGame_id(doc.getInteger(FIELD_GID));
+        g.setName(doc.getString(FIELD_NAME));
+        if (doc.getInteger(FIELD_YEAR) != null) {
+            g.setYear(doc.getInteger(FIELD_YEAR));
+            ;
         }
-        if (doc.getInteger("ranking") != null) {
-            g.setRanking(doc.getInteger("ranking"));;
+        if (doc.getInteger(FIELD_RANKING) != null) {
+            g.setRanking(doc.getInteger(FIELD_RANKING));
+            ;
         }
-        if (doc.getString("average") != null) {
-            g.setAverage(doc.getString("average"));;
+        if (doc.getString(FIELD_AVERAGE) != null) {
+            g.setAverage(doc.getString(FIELD_AVERAGE));
+            ;
         }
-        if (doc.getInteger("users_rated") != null) {
-            g.setUsers_rated(doc.getInteger("users_rated"));;
+        if (doc.getInteger(FIELD_USERS_RATED) != null) {
+            g.setUsers_rated(doc.getInteger(FIELD_USERS_RATED));
+            ;
         }
-        if (doc.getString("url") != null) {
-            g.setUrl(doc.getString("url"));;
+        if (doc.getString(FIELD_URL) != null) {
+            g.setUrl(doc.getString(FIELD_URL));
+            ;
         }
-        if (doc.getString("image") != null) {
-            g.setImage(doc.getString("image"));;
+        if (doc.getString(FIELD_IMAGE) != null) {
+            g.setImage(doc.getString(FIELD_IMAGE));
+            ;
         }
         return g;
     }
@@ -43,28 +50,28 @@ public class GameUtils {
         for (Game g : gameList) {
             JsonObjectBuilder job = Json.createObjectBuilder();
             if (g.getGame_id() != null) {
-                job.add("game_id", g.getGame_id());
+                job.add(FIELD_GID, g.getGame_id());
             }
             if (g.getName() != null) {
-                job.add("name", g.getName());
+                job.add(FIELD_NAME, g.getName());
             }
             if (g.getYear() != null) {
-                job.add("year", g.getYear());
+                job.add(FIELD_YEAR, g.getYear());
             }
             if (g.getRanking() != null) {
-                job.add("ranking", g.getRanking());
+                job.add(FIELD_RANKING, g.getRanking());
             }
             if (g.getAverage() != null) {
-                job.add("average", g.getAverage());
+                job.add(FIELD_AVERAGE, g.getAverage());
             }
             if (g.getUsers_rated() != null) {
-                job.add("users_rating", g.getUsers_rated());
+                job.add(FIELD_USERS_RATED, g.getUsers_rated());
             }
             if (g.getUrl() != null) {
-                job.add("url", g.getUrl());
+                job.add(FIELD_URL, g.getUrl());
             }
             if (g.getImage() != null) {
-                job.add("thumbnail", g.getImage());
+                job.add(FIELD_IMAGE, g.getImage());
             }
             jab.add(job);
         }
@@ -74,28 +81,28 @@ public class GameUtils {
     public static JsonObject toJson(Game g) {
         JsonObjectBuilder job = Json.createObjectBuilder();
         if (g.getGame_id() != null) {
-            job.add("game_id", g.getGame_id());
+            job.add(FIELD_GID, g.getGame_id());
         }
         if (g.getName() != null) {
-            job.add("name", g.getName());
+            job.add(FIELD_NAME, g.getName());
         }
         if (g.getYear() != null) {
-            job.add("year", g.getYear());
+            job.add(FIELD_YEAR, g.getYear());
         }
         if (g.getRanking() != null) {
-            job.add("ranking", g.getRanking());
+            job.add(FIELD_RANKING, g.getRanking());
         }
         if (g.getAverage() != null) {
-            job.add("average", g.getAverage());
+            job.add(FIELD_AVERAGE, g.getAverage());
         }
         if (g.getUsers_rated() != null) {
-            job.add("users_rating", g.getUsers_rated());
+            job.add(FIELD_USERS_RATED, g.getUsers_rated());
         }
         if (g.getUrl() != null) {
-            job.add("url", g.getUrl());
+            job.add(FIELD_URL, g.getUrl());
         }
         if (g.getImage() != null) {
-            job.add("thumbnail", g.getImage());
+            job.add(FIELD_IMAGE, g.getImage());
         }
         return job.build();
     }

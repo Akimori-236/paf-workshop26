@@ -6,12 +6,13 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import nus.iss.tfip.pafworkshop26.Constants;
 import nus.iss.tfip.pafworkshop26.model.Game;
 import nus.iss.tfip.pafworkshop26.repository.GameDBRepository;
 import nus.iss.tfip.pafworkshop26.util.GameUtils;
 
 @Service
-public class GameService {
+public class GameService implements Constants {
     @Autowired
     private GameDBRepository gameRepo;
 
@@ -39,5 +40,10 @@ public class GameService {
         Document doc = gameRepo.getGameByGID(gid);
         // convert Document to Game
         return GameUtils.toGame(doc);
+    }
+
+    public Integer getGIDByName(String name) {
+        Document doc = gameRepo.getGIDByName(name);
+        return doc.getInteger(FIELD_GID);
     }
 }

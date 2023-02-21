@@ -52,7 +52,7 @@ public class GameDBRepository implements Constants {
      * .skip(?);
      */
     public List<Document> getGameListByRank(int limit, int offset) {
-        Sort sortRanking = Sort.by(Direction.ASC, "ranking");
+        Sort sortRanking = Sort.by(Direction.ASC, FIELD_RANKING);
         Query query = new Query().with(sortRanking).limit(limit).skip(offset);
 
         // PROJECTIONS
@@ -62,8 +62,16 @@ public class GameDBRepository implements Constants {
 
     // db.game.find({"gid" : ???})
     public Document getGameByGID(Long gid) {
-        Criteria criteria = Criteria.where("gid").is(gid);
+        Criteria criteria = Criteria.where(FIELD_GID).is(gid);
         Query query = new Query(criteria);
+        return template.findOne(query, Document.class, COLLECTION_GAME);
+    }
+
+    // db.game.find({ "name": "???" }).projection({ gid: 1 })
+    public Document getGIDByName(String name) {
+        Criteria criteria = Criteria.where(FIELD_NAME).is(name);
+        Query query = new Query(criteria);
+        query.fields().include(FIELD_GID);
         return template.findOne(query, Document.class, COLLECTION_GAME);
     }
 }
