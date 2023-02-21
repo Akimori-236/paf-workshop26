@@ -16,14 +16,22 @@ public class GameService {
     private GameDBRepository gameRepo;
 
     public List<Game> getGameList(int limit, int offset) {
-        List<Document> docList = gameRepo.getGames(limit, offset);
-        List<Game> gameList = docList.stream()
+        List<Document> docList = gameRepo.getGameList(limit, offset);
+        // convert Documents to Games
+        return docList.stream()
                 .map(v -> GameUtils.toGame(v))
                 .toList();
-        return gameList;
     }
 
     public Long getTotalGames() {
         return gameRepo.getTotalGames();
+    }
+
+    public List<Game> getGameListByRank(int limit, int offset) {
+        List<Document> docList = gameRepo.getGameListByRank(limit, offset);
+        // convert Documents to Games
+        return docList.stream()
+                .map(v -> GameUtils.toGame(v))
+                .toList();
     }
 }

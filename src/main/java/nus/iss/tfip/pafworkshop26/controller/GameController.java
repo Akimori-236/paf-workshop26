@@ -1,6 +1,5 @@
 package nus.iss.tfip.pafworkshop26.controller;
 
-import java.time.Clock;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 import nus.iss.tfip.pafworkshop26.model.Game;
 import nus.iss.tfip.pafworkshop26.service.GameService;
 import nus.iss.tfip.pafworkshop26.util.GameUtils;
@@ -35,11 +33,14 @@ public class GameController {
         public ResponseEntity<String> getGameList(@RequestParam(defaultValue = "10") Integer limit,
                         @RequestParam(defaultValue = "0") Integer offset) {
                 List<Game> gameList = gameSvc.getGameList(limit, offset);
+                // query total sum
                 Long total = gameSvc.getTotalGames();
+                // get current time
                 String timestamp = ZonedDateTime.now(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm:ss"));
+                // convert game list to json array
                 JsonArray jArr = GameUtils.toJson(gameList);
-
+                // build json response
                 JsonObject jObj = Json.createObjectBuilder()
                                 .add("games", jArr)
                                 .add("offset", offset)
@@ -54,9 +55,30 @@ public class GameController {
                                 .body(jObj.toString());
         }
 
-        @GetMapping(path = {"/rank", "/rank/"})
-        public void getMethodName(@RequestParam String param) {
-                
+        @GetMapping(path = { "/rank", "/rank/" })
+        public ResponseEntity<String> getGameListByRank(@RequestParam(defaultValue = "10") Integer limit,
+                        @RequestParam(defaultValue = "0") Integer offset) {
+                List<Game> gameList = gameSvc.getGameListByRank(limit, offset);
+                // query total sum
+                Long total = gameSvc.getTotalGames();
+                // get current time
+                String timestamp = ZonedDateTime.now(ZoneId.systemDefault())
+                                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm:ss"));
+                // convert game list to json array
+                JsonArray jArr = GameUtils.toJson(gameList);
+                // build json response
+                JsonObject jObj = Json.createObjectBuilder()
+                                .add("games", jArr)
+                                .add("offset", offset)
+                                .add("limit", limit)
+                                .add("total", total)
+                                .add("timestamp", timestamp)
+                                .build();
+
+                return ResponseEntity
+                                .status(HttpStatus.NOT_ACCEPTABLE)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(jObj.toString());
         }
 
 }
