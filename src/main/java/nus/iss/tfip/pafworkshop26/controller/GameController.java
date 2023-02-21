@@ -54,4 +54,9 @@ public class GameController {
                                 .body(jObj.toString());
         }
 
+        @GetMapping(path = {"/rank", "/rank/"})
+        public void getMethodName(@RequestParam String param) {
+                
+        }
+
 }

@@ -25,7 +25,7 @@ public class GameUtils {
         for (Game g : gameList) {
             JsonObjectBuilder job = Json.createObjectBuilder();
             if (g.getGame_id() != null) {
-                job.add("gid", g.getGame_id());
+                job.add("game_id", g.getGame_id());
             }
             if (g.getName() != null) {
                 job.add("name", g.getName());
