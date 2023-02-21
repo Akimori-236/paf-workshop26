@@ -34,4 +34,10 @@ public class GameService {
                 .map(v -> GameUtils.toGame(v))
                 .toList();
     }
+
+    public Game getGameByGID(Long gid) {
+        Document doc = gameRepo.getGameByGID(gid);
+        // convert Document to Game
+        return GameUtils.toGame(doc);
+    }
 }

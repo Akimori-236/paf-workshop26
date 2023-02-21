@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,7 +51,7 @@ public class GameController {
                                 .build();
 
                 return ResponseEntity
-                                .status(HttpStatus.NOT_ACCEPTABLE)
+                                .status(HttpStatus.OK)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .body(jObj.toString());
         }
@@ -76,7 +77,20 @@ public class GameController {
                                 .build();
 
                 return ResponseEntity
-                                .status(HttpStatus.NOT_ACCEPTABLE)
+                                .status(HttpStatus.OK)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(jObj.toString());
+        }
+
+        @GetMapping(path = "/{game_id}")
+        public ResponseEntity<String> getGameByGID(@PathVariable Long game_id) {
+                Game game = gameSvc.getGameByGID(game_id);
+
+                // build json response
+                JsonObject jObj = GameUtils.toJson(game);
+
+                return ResponseEntity
+                                .status(HttpStatus.OK)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .body(jObj.toString());
         }

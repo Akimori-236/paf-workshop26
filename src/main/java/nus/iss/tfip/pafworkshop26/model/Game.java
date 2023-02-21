@@ -6,10 +6,10 @@ import lombok.Data;
 public class Game {
     private Integer game_id;
     private String name;
-    private String year;
-    private String ranking;
+    private Integer year;
+    private Integer ranking;
     private String average;
-    private String users_rating;
+    private Integer users_rated;
     private String url;
-    private String thumbnail;
+    private String image;
 }

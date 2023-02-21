@@ -21,12 +21,12 @@ public class GameDBRepository implements Constants {
 
     /*
      * db.game.find()
-     *  .projection({
-     *      gid: 1,
-     *      name: 1
-     *  })
-     *  .limit(?)
-     *  .skip(?)
+     * .projection({
+     * gid: 1,
+     * name: 1
+     * })
+     * .limit(?)
+     * .skip(?)
      */
     public List<Document> getGameList(int limit, int offset) {
         Query query = new Query().limit(limit).skip(offset);
@@ -42,14 +42,14 @@ public class GameDBRepository implements Constants {
     }
 
     /*
-db.game.find()
-    .projection({
-        gid: 1,
-        name: 1
-    })
-    .sort({ranking:1})
-    .limit(3)
-    .skip(0)
+     * db.game.find()
+     * .projection({
+     * gid: 1,
+     * name: 1
+     * })
+     * .sort({ ranking: 1 })
+     * .limit(?)
+     * .skip(?);
      */
     public List<Document> getGameListByRank(int limit, int offset) {
         Sort sortRanking = Sort.by(Direction.ASC, "ranking");
@@ -58,5 +58,12 @@ db.game.find()
         // PROJECTIONS
         query.fields().include(FIELD_GID, FIELD_NAME);
         return template.find(query, Document.class, COLLECTION_GAME);
+    }
+
+    // db.game.find({"gid" : ???})
+    public Document getGameByGID(Long gid) {
+        Criteria criteria = Criteria.where("gid").is(gid);
+        Query query = new Query(criteria);
+        return template.findOne(query, Document.class, COLLECTION_GAME);
     }
 }
