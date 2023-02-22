@@ -20,4 +20,5 @@ public interface Constants {
     public static final String FIELD_C_TEXT = "c_text";
 
     public static final String FIELD_AVERAGE = "average";
+    public static final String FIELD_COMMENT = "comment";
 }

@@ -20,7 +20,7 @@ public class GameService implements Constants {
         List<Document> docList = gameRepo.getGameList(limit, offset);
         // convert Documents to Games
         return docList.stream()
-                .map(v -> GameUtils.toGame(v))
+                .map(v -> GameUtils.documentToGame(v))
                 .toList();
     }
 
@@ -32,18 +32,17 @@ public class GameService implements Constants {
         List<Document> docList = gameRepo.getGameListByRank(limit, offset);
         // convert Documents to Games
         return docList.stream()
-                .map(v -> GameUtils.toGame(v))
+                .map(v -> GameUtils.documentToGame(v))
                 .toList();
     }
 
     public Game getGameByGID(Long gid) {
         Document doc = gameRepo.getGameByGID(gid);
         // convert Document to Game
-        return GameUtils.toGame(doc);
+        return GameUtils.documentToGame(doc);
     }
 
-    public Integer getGIDByName(String name) {
-        Document doc = gameRepo.getGIDByName(name);
-        return doc.getInteger(FIELD_GID);
+    public Long getGIDByName(String name) {
+        return Long.parseLong(gameRepo.getGIDByName(name).getInteger(FIELD_GID).toString());
     }
 }

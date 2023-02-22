@@ -40,7 +40,7 @@ public class GameRestController {
         String timestamp = ZonedDateTime.now(ZoneId.systemDefault())
                 .format(DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm:ss"));
         // convert game list to json array
-        JsonArray jArr = GameUtils.toJson(gameList);
+        JsonArray jArr = GameUtils.gameToJson(gameList);
         // build json response
         JsonObject jObj = Json.createObjectBuilder()
                 .add("games", jArr)
@@ -66,7 +66,7 @@ public class GameRestController {
         String timestamp = ZonedDateTime.now(ZoneId.systemDefault())
                 .format(DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm:ss"));
         // convert game list to json array
-        JsonArray jArr = GameUtils.toJson(gameList);
+        JsonArray jArr = GameUtils.gameToJson(gameList);
         // build json response
         JsonObject jObj = Json.createObjectBuilder()
                 .add("games", jArr)
@@ -87,7 +87,7 @@ public class GameRestController {
         Game game = gameSvc.getGameByGID(game_id);
 
         // build json response
-        JsonObject jObj = GameUtils.toJson(game);
+        JsonObject jObj = GameUtils.gameToJson(game);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
