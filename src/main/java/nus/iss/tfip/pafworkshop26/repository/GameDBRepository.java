@@ -1,6 +1,8 @@
 package nus.iss.tfip.pafworkshop26.repository;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +11,13 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.DateOperators;
 import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation.AddFieldsOperationBuilder;
+import org.springframework.data.mongodb.core.aggregation.DateOperators.DateToString;
+import org.springframework.data.mongodb.core.aggregation.DateOperators.Timezone;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -114,6 +119,10 @@ public class GameDBRepository implements Constants {
         // $lookup
         LookupOperation lookupCID = Aggregation.lookup(
                 COLLECTION_COMMENT, FIELD_GID, FIELD_GID, FIELD_COMMENT);
+        // get timestamp
+        DateToString timenow = DateToString.dateOf("$$NOW")
+                .toString("%Y-%m-%d %H:%M:%S %z")
+                .withTimezone(Timezone.fromZone(TimeZone.getTimeZone("Singapore")));
         // $project
         ProjectionOperation project = Aggregation.project(
                 FIELD_GID,
@@ -125,7 +134,8 @@ public class GameDBRepository implements Constants {
                 .and(FIELD_RANKING).as(FIELD_RANK)
                 .and(FIELD_IMAGE).as(FIELD_THUMBNAIL)
                 .and(VALUE_COMMENT_CID).as(FIELD_COMMENT)
-                .and(VALUE_NEWDATE).as(FIELD_TIMESTAMP);
+                // .and(VALUE_DATENOW).as(FIELD_TIMESTAMP);
+                .and(timenow).as(FIELD_TIMESTAMP);
 
         Aggregation pipeline = Aggregation.newAggregation(
                 matchGID, lookupCID, project);

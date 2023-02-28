@@ -26,5 +26,5 @@ public interface Constants {
     public static final String FIELD_COMMENT = "comment";
 
     public static final String VALUE_COMMENT_CID = "$comment.c_id";
-    public static final String VALUE_NEWDATE = "$$NOW";
+    public static final String VALUE_DATENOW = "$$NOW";
 }
