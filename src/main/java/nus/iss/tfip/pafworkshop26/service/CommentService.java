@@ -28,7 +28,7 @@ public class CommentService implements Constants {
         return null;
     }
 
-    public Document insertNewComment(MultiValueMap<String, String> review) throws Exception {
+    public Document insertNewComment(MultiValueMap<String, String> review) throws RuntimeException {
         // check if game exists
         Long gid = null;
         gid = gameSvc.getGIDByName(review.getFirst(FIELD_NAME));
@@ -41,13 +41,22 @@ public class CommentService implements Constants {
         if (c_id == null) {
             c_id = UUID.randomUUID().toString().substring(0, 8);
         }
-        //
+        // create comment
         Comment comment = Comment.create(c_id, review.getFirst(FIELD_USER),
                 Integer.parseInt(review.getFirst(FIELD_RATING)), review.getFirst(FIELD_COMMENT), gid);
-
         Document doc = GameUtils.commentToDocument(comment);
+
         Document response = commentRepo.insertNewComment(doc);
+        // put generated cid together with response containing objectid
         response.put(FIELD_C_ID, c_id);
         return response;
+    }
+
+    public Document updateComment(String cid, MultiValueMap<String, String> edits) {
+        Comment c = new Comment();
+        // c.set;
+
+        Document doc = GameUtils.commentToDocument(c);
+        return commentRepo.updateComment(cid, doc);
     }
 }

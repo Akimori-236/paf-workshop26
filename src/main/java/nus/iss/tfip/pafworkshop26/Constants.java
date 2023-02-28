@@ -10,9 +10,12 @@ public interface Constants {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_YEAR = "year";
     public static final String FIELD_RANKING = "ranking";
+    public static final String FIELD_RANK = "rank";
     public static final String FIELD_USERS_RATED = "users_rated";
     public static final String FIELD_URL = "url";
     public static final String FIELD_IMAGE = "image";
+    public static final String FIELD_THUMBNAIL = "thumbnail";
+    public static final String FIELD_TIMESTAMP = "timestamp";
 
     public static final String FIELD_C_ID = "c_id";
     public static final String FIELD_USER = "user";
@@ -21,4 +24,7 @@ public interface Constants {
 
     public static final String FIELD_AVERAGE = "average";
     public static final String FIELD_COMMENT = "comment";
+
+    public static final String VALUE_COMMENT_CID = "$comment.c_id";
+    public static final String VALUE_NEWDATE = "$$NOW";
 }

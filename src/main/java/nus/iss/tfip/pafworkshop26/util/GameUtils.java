@@ -3,6 +3,7 @@ package nus.iss.tfip.pafworkshop26.util;
 import java.util.List;
 
 import org.bson.Document;
+import org.springframework.http.HttpStatus;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
@@ -116,5 +117,14 @@ public class GameUtils implements Constants {
         doc.put(FIELD_C_TEXT, comment.getC_text());
         doc.put(FIELD_GID, comment.getGid());
         return doc;
+    }
+
+    public static String generateErrorJson(RuntimeException e, HttpStatus statusCode) {
+        String jsonError = Json.createObjectBuilder()
+                .add("statusCode", statusCode.value())
+                .add("message", e.getMessage())
+                .build()
+                .toString();
+        return jsonError;
     }
 }

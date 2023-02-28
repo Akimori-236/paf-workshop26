@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.json.JsonObject;
 import nus.iss.tfip.pafworkshop26.Constants;
 import nus.iss.tfip.pafworkshop26.model.Game;
 import nus.iss.tfip.pafworkshop26.repository.GameDBRepository;
@@ -44,5 +45,11 @@ public class GameService implements Constants {
 
     public Long getGIDByName(String name) {
         return Long.parseLong(gameRepo.getGIDByName(name).getInteger(FIELD_GID).toString());
+    }
+
+    public Document getCommentsByGID(Long gid) {
+        Document doc = gameRepo.getCommentsByGID(gid);
+
+        return doc;
     }
 }

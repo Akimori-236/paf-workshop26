@@ -7,6 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.LookupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation.AddFieldsOperationBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -73,5 +79,58 @@ public class GameDBRepository implements Constants {
         Query query = new Query(criteria);
         query.fields().include(FIELD_GID);
         return template.findOne(query, Document.class, COLLECTION_GAME);
+    }
+
+    /*
+     * db.game.aggregate([
+     * { $match: { gid: 1 } },
+     * {
+     * $lookup: {
+     * from: "comment",
+     * localField: "gid",
+     * foreignField: "gid",
+     * as: "comment "
+     * }
+     * },
+     * {
+     * $project: {
+     * _id: 0,
+     * gid: 1,
+     * name: 1,
+     * year: 1,
+     * rank: "$ranking",
+     * users_rated: 1,
+     * url: 1,
+     * thumbnail: "$image",
+     * comments: "$comment.c_id"
+     * }
+     * }
+     * ])
+     */
+    public Document getCommentsByGID(Long gid) {
+        Criteria criteria = Criteria.where(FIELD_GID).is(gid);
+        // $match
+        MatchOperation matchGID = Aggregation.match(criteria);
+        // $lookup
+        LookupOperation lookupCID = Aggregation.lookup(
+                COLLECTION_COMMENT, FIELD_GID, FIELD_GID, FIELD_COMMENT);
+        // $project
+        ProjectionOperation project = Aggregation.project(
+                FIELD_GID,
+                FIELD_NAME,
+                FIELD_YEAR,
+                FIELD_USERS_RATED,
+                FIELD_URL)
+                .andExclude(FIELD_OBJ_ID)
+                .and(FIELD_RANKING).as(FIELD_RANK)
+                .and(FIELD_IMAGE).as(FIELD_THUMBNAIL)
+                .and(VALUE_COMMENT_CID).as(FIELD_COMMENT)
+                .and(VALUE_NEWDATE).as(FIELD_TIMESTAMP);
+
+        Aggregation pipeline = Aggregation.newAggregation(
+                matchGID, lookupCID, project);
+        AggregationResults<Document> results = template.aggregate(
+                pipeline, COLLECTION_GAME, Document.class);
+        return results.getUniqueMappedResult();
     }
 }

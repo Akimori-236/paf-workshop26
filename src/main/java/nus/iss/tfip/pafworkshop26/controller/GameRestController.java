@@ -5,6 +5,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -94,4 +95,18 @@ public class GameRestController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(jObj.toString());
     }
+
+    // Workshop28(a)
+    // Test return document
+    @GetMapping(path="/{game_id}/reviews")
+    public ResponseEntity<Document> getCommentsByGID(@PathVariable Long game_id) {
+        Document doc = gameSvc.getCommentsByGID(game_id);
+
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(doc);
+    }
+
 }
