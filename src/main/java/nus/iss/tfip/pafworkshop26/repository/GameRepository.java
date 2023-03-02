@@ -1,6 +1,5 @@
 package nus.iss.tfip.pafworkshop26.repository;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -11,21 +10,25 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.DateOperators;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
-import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation.AddFieldsOperationBuilder;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.aggregation.DateOperators.DateToString;
 import org.springframework.data.mongodb.core.aggregation.DateOperators.Timezone;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.LimitOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.mongodb.BasicDBObject;
+
 import nus.iss.tfip.pafworkshop26.Constants;
 
 @Repository
-public class GameDBRepository implements Constants {
+public class GameRepository implements Constants {
 
     @Autowired
     private MongoTemplate template;
@@ -119,7 +122,7 @@ public class GameDBRepository implements Constants {
         // $lookup
         LookupOperation lookupCID = Aggregation.lookup(
                 COLLECTION_COMMENT, FIELD_GID, FIELD_GID, FIELD_COMMENT);
-        // get timestamp
+        // get timestamp and set timezone to sg
         DateToString timenow = DateToString.dateOf("$$NOW")
                 .toString("%Y-%m-%d %H:%M:%S %z")
                 .withTimezone(Timezone.fromZone(TimeZone.getTimeZone("Singapore")));
@@ -129,18 +132,16 @@ public class GameDBRepository implements Constants {
                 FIELD_NAME,
                 FIELD_YEAR,
                 FIELD_USERS_RATED,
-                FIELD_URL)
-                .andExclude(FIELD_OBJ_ID)
+                FIELD_URL).andExclude(FIELD_OBJ_ID)
                 .and(FIELD_RANKING).as(FIELD_RANK)
                 .and(FIELD_IMAGE).as(FIELD_THUMBNAIL)
                 .and(VALUE_COMMENT_CID).as(FIELD_COMMENT)
-                // .and(VALUE_DATENOW).as(FIELD_TIMESTAMP);
                 .and(timenow).as(FIELD_TIMESTAMP);
-
         Aggregation pipeline = Aggregation.newAggregation(
                 matchGID, lookupCID, project);
         AggregationResults<Document> results = template.aggregate(
                 pipeline, COLLECTION_GAME, Document.class);
         return results.getUniqueMappedResult();
     }
+
 }

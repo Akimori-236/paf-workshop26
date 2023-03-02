@@ -24,7 +24,20 @@ public interface Constants {
 
     public static final String FIELD_AVERAGE = "average";
     public static final String FIELD_COMMENT = "comment";
+    public static final String FIELD_REVIEW_ID = "review_id";
+    public static final String FIELD_GAME_NAME = "game.name";
+    public static final String FIELD_GAMES = "games";
 
+    public static final String VALUE_OBJ_ID = "$_id";
+    public static final String VALUE_C_ID = "$c_id";
+    public static final String VALUE_GID = "$gid";
+    public static final String VALUE_REVIEW_ID = "$review_id";
     public static final String VALUE_COMMENT_CID = "$comment.c_id";
+    public static final String VALUE_COMMENT = "$comment";
     public static final String VALUE_DATENOW = "$$NOW";
+    public static final String VALUE_RATING = "$rating";
+    public static final String VALUE_USER = "$user";
+    public static final String VALUE_C_TEXT = "$c_text";
+    public static final String VALUE_GAME_NAME = "$game.name";
+    public static final String VALUE_NAME = "$name";
 }

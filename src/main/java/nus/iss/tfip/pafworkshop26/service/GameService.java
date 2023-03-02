@@ -6,16 +6,15 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jakarta.json.JsonObject;
 import nus.iss.tfip.pafworkshop26.Constants;
 import nus.iss.tfip.pafworkshop26.model.Game;
-import nus.iss.tfip.pafworkshop26.repository.GameDBRepository;
+import nus.iss.tfip.pafworkshop26.repository.GameRepository;
 import nus.iss.tfip.pafworkshop26.util.GameUtils;
 
 @Service
 public class GameService implements Constants {
     @Autowired
-    private GameDBRepository gameRepo;
+    private GameRepository gameRepo;
 
     public List<Game> getGameList(int limit, int offset) {
         List<Document> docList = gameRepo.getGameList(limit, offset);
@@ -48,8 +47,7 @@ public class GameService implements Constants {
     }
 
     public Document getCommentsByGID(Long gid) {
-        Document doc = gameRepo.getCommentsByGID(gid);
-
-        return doc;
+        return gameRepo.getCommentsByGID(gid);
     }
+
 }

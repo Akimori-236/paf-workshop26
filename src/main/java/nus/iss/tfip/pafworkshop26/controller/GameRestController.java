@@ -20,6 +20,7 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import nus.iss.tfip.pafworkshop26.model.Game;
 import nus.iss.tfip.pafworkshop26.service.GameService;
+import nus.iss.tfip.pafworkshop26.service.CommentService;
 import nus.iss.tfip.pafworkshop26.util.GameUtils;
 
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,8 @@ public class GameRestController {
 
     @Autowired
     private GameService gameSvc;
+    @Autowired
+    private CommentService commentSvc;
 
     @GetMapping
     public ResponseEntity<String> getGameList(@RequestParam(defaultValue = "10") Integer limit,
@@ -103,6 +106,23 @@ public class GameRestController {
         Document doc = gameSvc.getCommentsByGID(game_id);
 
 
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(doc);
+    }
+
+    // Workshop28(b)
+    @GetMapping(path="/rank/{lowestHighest}")
+    public ResponseEntity<List<Document>> getGamesByRating(@PathVariable String lowestHighest) {
+        // check if lowest/highest
+        if (!(lowestHighest.equalsIgnoreCase("lowest") || lowestHighest.equalsIgnoreCase("highest"))) {
+                return ResponseEntity
+                .status(HttpStatus.NOT_ACCEPTABLE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(null);
+        }
+        List<Document> doc = commentSvc.getGamesByRating(lowestHighest);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

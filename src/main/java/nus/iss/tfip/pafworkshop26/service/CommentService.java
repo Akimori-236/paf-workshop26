@@ -1,5 +1,6 @@
 package nus.iss.tfip.pafworkshop26.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.bson.Document;
@@ -54,9 +55,13 @@ public class CommentService implements Constants {
 
     public Document updateComment(String cid, MultiValueMap<String, String> edits) {
         Comment c = new Comment();
-        // c.set;
+        // TODO:c.set;
 
         Document doc = GameUtils.commentToDocument(c);
         return commentRepo.updateComment(cid, doc);
+    }
+
+    public List<Document> getGamesByRating(String lowestHighest) {
+        return commentRepo.getGamesByRating(lowestHighest);
     }
 }
